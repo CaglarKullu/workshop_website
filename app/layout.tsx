@@ -3,6 +3,7 @@ import Footer from "@/components/Footer"
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { ClerkProvider } from '@clerk/nextjs';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,6 +18,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
+    <ClerkProvider>
     <html lang="en" data-theme="lemonade">
       <body className={inter.className}>
         <Nav/>
@@ -24,5 +26,6 @@ export default function RootLayout({
         <Footer/>
         </body>
     </html>
+    </ClerkProvider>
   )
 }
