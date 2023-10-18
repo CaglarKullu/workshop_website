@@ -13,6 +13,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/ui/popover"
+/* import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useCallback } from "react" */
+
 
 export function DatePickerWithRange({
   className,
@@ -21,6 +24,24 @@ export function DatePickerWithRange({
     from: new Date(2023, 0, 20),
     to: addDays(new Date(2023, 0, 20), 20),
   })
+/*   const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()!
+  
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams)
+      params.set(name, value)
+ 
+      return params.toString()
+    },
+    [searchParams]
+  )
+  if (date?.from && date?.to){
+    const formattedStartDate = format(date.from, 'yyyy-MM-dd');
+    const formattedEndDate = format(date.to, 'yyyy-MM-dd');
+    router.push(pathname + '?' + createQueryString('startDate', formattedStartDate) + createQueryString('endDate', formattedEndDate));
+  } */
  console.log(date);
   return (
     <div className={cn("grid gap-2", className)}>

@@ -4,6 +4,8 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
+import AnonymousSessionProvider from '@/lib/providers/AnonymousSessionProvider';
+import NextAuthProvider from '@/lib/providers/SessionProvider';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <ClerkProvider>
+
     <html lang="en" data-theme="lemonade">
       <body className={inter.className}>
         <Nav/>
@@ -26,6 +28,6 @@ export default function RootLayout({
         <Footer/>
         </body>
     </html>
-    </ClerkProvider>
+  
   )
 }
