@@ -13,23 +13,26 @@ adapter:PrismaAdapter(prisma),
   providers: [
     
     CredentialsProvider({
-        name: "anon",
+        name: "credentials",
         credentials: {},
         async authorize(credentials, req) {
-            
-          //no need to check anything here, just create a new CT anonymous session and return the token
-          const authResult = await createAnonymousUser();
-          /**
-           * https://docs.commercetools.com/tutorials/anonymous-session#creating-a-token-with-a-new-anonymous-session
-           * {
-               "access_token": "vkFuQ6oTwj8_Ye4eiRSsqMeqLYNeQRJi",
-               "token_type": "Bearer",
-               "expires_in": 172800,
-               "refresh_token": "{projectKey}:OWStLG0eaeVs7Yx3-mHcn8iAZohBohCiJSDdK1UCJ9U",
-               "scope": "view_products:{projectKey} manage_my_orders:{projectKey} manage_my_profile:{projectKey}"
-             }
-           */
-          return { token: authResult, id: authResult?.id! };
+            const {email} = credentials as{ email:string}
+         const user = await prisma.user.findUnique(
+          {
+            where:{
+              email: email
+            }
+          }
+         );
+         if (!user) {
+          throw Error("email mismatch!")
+         }
+          return {
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            id:user.id
+          }
         },
       }),
   ],
@@ -41,19 +44,20 @@ adapter:PrismaAdapter(prisma),
             session.user.email = token.email
             session.user.image = token.picture
             session.user.role = token.role
-            session.accessToken = token.accessToken
+           
         }
         return session;
     },
     async jwt({token, user, account, profile}) {
+      
         const dbUSer = await prisma.user.findUnique({
             where: {
                 id: token.id
             }
         })
-
+     
         if (!dbUSer) {
- 
+          
            token.id= user!.id
            return token;
         }
@@ -69,18 +73,4 @@ adapter:PrismaAdapter(prisma),
     },
   }
 };
-async function createAnonymousUser() : Promise<import("next-auth").User | PromiseLike<import("next-auth").User | null> | null> {
-    const anonUser = await prisma.user.create({
-        data: {
-            email: 'anon@anon.com',
-            name: 'Anon User',
-            role:Role.ANON,
-            ev_slug:"1234"
-          },
-    })
-    return {
-        id: anonUser.id
-
-    };
-}
 
