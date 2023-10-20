@@ -2,7 +2,6 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "@/lib/utils/prisma";
-import { Role } from "@prisma/client";
 
 
 export const authOptions: NextAuthOptions = {
@@ -11,7 +10,6 @@ adapter:PrismaAdapter(prisma),
     strategy: "jwt",
   },
   providers: [
-    
     CredentialsProvider({
         name: "credentials",
         credentials: {},
@@ -27,50 +25,35 @@ adapter:PrismaAdapter(prisma),
          if (!user) {
           throw Error("email mismatch!")
          }
-          return {
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            id:user.id
-          }
+          return user;
         },
       }),
   ],
-  callbacks: {
-    async session({token, session}) {
-        if(token){
-            session.user.id = token.id
-            session.user.name = token.name
-            session.user.email = token.email
-            session.user.image = token.picture
-            session.user.role = token.role
-           
-        }
-        return session;
-    },
-    async jwt({token, user, account, profile}) {
-      
-        const dbUSer = await prisma.user.findUnique({
-            where: {
-                id: token.id
-            }
-        })
-     
-        if (!dbUSer) {
-          
-           token.id= user!.id
-           return token;
-        }
-        return {
-            accessToken: account?.access_token!,
-            id: dbUSer.id,
-            name: dbUSer.name,
-            role: dbUSer.role,
-            email: dbUSer.email,
-            picture: dbUSer.image
-            
-        }
-    },
-  }
+  secret:process.env.NEXTAUTH_SECRET,
+callbacks:{
+  async jwt({token,user,session}){
+    // check user if there is user pass id and the role to add more params add to next-auth.d.ts file
+    if (user) {
+      return{
+        ...token,
+        id:user.id,
+        role:user.role!
+      };
+    }
+    return token;
+  },
+  async session({session, token,user}){
+    // data to session
+    return{
+      ...session,
+      user:{
+        ...user,
+        id:token.id,
+        role:token.role
+      }
+    };
+  },
+
+}
 };
 

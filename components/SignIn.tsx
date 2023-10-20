@@ -1,14 +1,26 @@
 
 "use client"
+import { signIn } from "next-auth/react";
+import {useRouter} from "next/navigation";
 import React, { useState, ChangeEvent } from "react";
 
 const SignIn: React.FC = () => {
+  const router = useRouter();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-
+  const [error, setError] = useState<string>("");
   const handleSignIn =  async (e: React.MouseEvent<HTMLButtonElement>)=> {
    e.preventDefault();
-   
+   const res = await signIn(
+    "credentials", {
+      email,
+      password,
+      redirect:false,
+    }
+   );
+   console.log(res?.error);
+   if (res?.error) return setError(res.error);
+  router.replace("/");
   };
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {

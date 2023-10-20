@@ -1,12 +1,14 @@
 "use client"
 import { DatePickerWithRange } from '@/components/ui/ui/range-picker';
 import { useSearchParams } from 'next/navigation';
+import { useSession } from "next-auth/react"
 
 
 
 export const SearchPage = () => {
   const searchParams = useSearchParams();
-
+  const { data: session, status } = useSession()
+  console.log(session?.user.id)
   return (
 
     <div className='flex min-h-screen flex-col justify-self-auto items p-5'>
