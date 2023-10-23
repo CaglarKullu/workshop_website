@@ -21,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
 <NextAuthProvider>
-    <html lang="en" data-theme="lemonade">
+    <html lang="en">
       <body className={inter.className}>
         <Nav/>
         {children}
