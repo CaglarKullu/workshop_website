@@ -3,6 +3,9 @@
 
 import Link from 'next/link'
 import React from 'react'
+import {BiUserCircle } from 'react-icons/bi'
+import {BsFillCartFill } from 'react-icons/bs'
+import { IconContext } from "react-icons";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,22 +20,28 @@ const Nav = () => {
   return (
     <nav>
 <div className="navbar bg-background flex-between w-full pt-3">
-  <div className="flex-1">
+  <div className="flex-auto">
   <Link className=" normal-case text-xl text-primary"  href={'/'}> Altolye Nova</Link>
-  <div className=" justify-evenly space-x-5 md:space-x-2 pl-20" >
-    <Link href={''}>Categories</Link>
-    <Link href={''}>Something</Link>
-    <Link href={''}>Something Else</Link>
+  <div className=" justify-evenly space-x-10 md:space-x-2 pl-20" >
+    <Link className='pr-5' href={'/about'}>About Us</Link>
+    <Link className='pr-5' href={'/search-page'}>Events</Link>
+    <Link className='pr-5' href={'/contact'}>Contact</Link>
   </div>
   </div>
   {/* Desktop Navigation */}
   <div className="sm:flex hidden">
     <ul className="menu menu-horizontal px-1 ">
-      <li>      <Link className='normal-case text-primary' href={'/search-page'}>Search Page</Link> </li>
+      <li> <Link className='text-primary' href={'/search-page'}>
+      <IconContext.Provider value={{ color: "hsl(var(--primary))", className: "global-class-name" }}>
+        <BiUserCircle size={20}/>
+        </IconContext.Provider>
+      </Link> </li>
       <li>
         <details>
           <summary className='normal-case text-primary'>
-            Parent
+          <IconContext.Provider value={{ color: "hsl(var(--primary))", className: "global-class-name" }}>
+        <BsFillCartFill size={20}/>
+        </IconContext.Provider>
           </summary>
           <ul className="p-2 bg-base-100 text-primary">
             <li><a>Link 1</a></li>
@@ -45,7 +54,9 @@ const Nav = () => {
   {/* Mobile Navigation */}
   <div className="sm:hidden flex relative text-primary menu menu-horizonta">
   <DropdownMenu>
-  <DropdownMenuTrigger>Profile Icon</DropdownMenuTrigger>
+  <DropdownMenuTrigger><IconContext.Provider value={{ color: "hsl(var(--primary))", className: "global-class-name" }}>
+        <BiUserCircle size={20}/>
+        </IconContext.Provider></DropdownMenuTrigger>
   <DropdownMenuContent >
     <DropdownMenuLabel >My Account</DropdownMenuLabel>
     <DropdownMenuSeparator />
