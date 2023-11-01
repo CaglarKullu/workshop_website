@@ -33,7 +33,7 @@ const Nav = () => {
     <ul className="menu menu-horizontal px-1 ">
       <li> <Link className='text-primary' href={'/search-page'}>
       <IconContext.Provider value={{ color: "hsl(var(--primary))", className: "global-class-name" }}>
-        <BiUserCircle size={20}/>
+        <BiUserCircle size={25}/>
         </IconContext.Provider>
       </Link> </li>
       <li>
